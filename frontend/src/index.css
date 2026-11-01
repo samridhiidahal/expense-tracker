@@ -1,0 +1,121 @@
+:root {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: #1f2937;
+  background: #f3f4f6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+a {
+  color: #2563eb;
+}
+
+.center {
+  text-align: center;
+  margin-top: 4rem;
+}
+
+.auth-card {
+  max-width: 380px;
+  margin: 4rem auto;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.auth-card h1 {
+  margin-top: 0;
+  font-size: 1.5rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+input {
+  display: block;
+  width: 100%;
+  margin-top: 0.35rem;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+button {
+  padding: 0.65rem 1rem;
+  border: 0;
+  border-radius: 8px;
+  background: #2563eb;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.auth-card button {
+  width: 100%;
+}
+
+.ghost {
+  background: transparent;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+
+.error {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.muted {
+  color: #6b7280;
+  font-size: 0.9rem;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  padding: 0.8rem 1.5rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.topbar h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.topbar .right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.9rem;
+}
+
+.page {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
