@@ -45,6 +45,7 @@ export default function Signup() {
           Email
           <input
             type="email"
+             autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -54,6 +55,7 @@ export default function Signup() {
           Password
           <input
             type="password"
+            autoComplete="new-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -63,6 +65,7 @@ export default function Signup() {
           Confirm password
           <input
             type="password"
+            autoComplete="new-password"
             value={confirm}
             onChange={(e) => setConfirm(e.target.value)}
             required

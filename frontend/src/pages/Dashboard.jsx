@@ -1,10 +1,18 @@
-import { useCallback, useEffect, useState } from "react";
+import {
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { api } from "../api";
 import { useAuth } from "../AuthContext";
 import ExpenseForm from "../components/ExpenseForm";
-import SummaryPanel from "../components/SummaryPanel";
 import { formatAmount, formatDate } from "../format";
+
+const SummaryPanel = lazy(() => import("../components/SummaryPanel"));
 
 export default function Dashboard() {
   const { user, logout } = useAuth();
@@ -15,7 +23,18 @@ export default function Dashboard() {
   const [editing, setEditing] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
+  const [deletingId, setDeletingId] = useState(null);
   const [version, setVersion] = useState(0);
+  const noticeTimer = useRef(null);
+
+  function showNotice(text) {
+    setNotice(text);
+    clearTimeout(noticeTimer.current);
+    noticeTimer.current = setTimeout(() => setNotice(""), 3000);
+  }
+
+  useEffect(() => () => clearTimeout(noticeTimer.current), []);
 
   const reload = useCallback(async () => {
     const params = new URLSearchParams({ limit: "500" });
@@ -44,7 +63,8 @@ export default function Dashboard() {
   }, [reload]);
 
   async function handleSave(payload) {
-    if (editing) {
+    const wasEditing = Boolean(editing);
+    if (wasEditing) {
       await api(`/expenses/${editing.id}`, { method: "PATCH", json: payload });
       setEditing(null);
     } else {
@@ -52,17 +72,22 @@ export default function Dashboard() {
     }
     await reload();
     setVersion((v) => v + 1);
+    showNotice(wasEditing ? "Expense updated." : "Expense added.");
   }
 
   async function handleDelete(expense) {
     if (!window.confirm(`Delete "${expense.title}"?`)) return;
+    setDeletingId(expense.id);
     try {
       await api(`/expenses/${expense.id}`, { method: "DELETE" });
       if (editing?.id === expense.id) setEditing(null);
       await reload();
       setVersion((v) => v + 1);
+      showNotice("Expense deleted.");
     } catch (err) {
       setError(err.message);
+    } finally {
+      setDeletingId(null);
     }
   }
 
@@ -91,9 +116,26 @@ export default function Dashboard() {
       </header>
 
       <main className="page">
-        {error && <p className="error">{error}</p>}
+        {error && (
+          <p className="error" role="alert">
+            {error}
+          </p>
+        )}
+        {notice && (
+          <p className="notice" role="status">
+            {notice}
+          </p>
+        )}
 
-        <SummaryPanel refreshKey={version} />
+        <Suspense
+          fallback={
+            <section className="card">
+              <p className="empty">Loading summary...</p>
+            </section>
+          }
+        >
+          <SummaryPanel refreshKey={version} />
+        </Suspense>
 
         <ExpenseForm
           key={editing ? editing.id : "new"}
@@ -167,13 +209,15 @@ export default function Dashboard() {
                         key={item.id}
                         className={editing?.id === item.id ? "editing" : ""}
                       >
-                        <td>{formatDate(item.expense_date)}</td>
-                        <td>{item.title}</td>
-                        <td>
+                        <td data-label="Date">{formatDate(item.expense_date)}</td>
+                        <td data-label="Title">{item.title}</td>
+                        <td data-label="Category">
                           <span className="tag">{item.category}</span>
                         </td>
-                        <td className="num">{formatAmount(item.amount)}</td>
-                        <td>
+                        <td className="num" data-label="Amount">
+                          {formatAmount(item.amount)}
+                        </td>
+                        <td className="actions-cell">
                           <div className="row-actions">
                             <button
                               className="ghost"
@@ -183,9 +227,10 @@ export default function Dashboard() {
                             </button>
                             <button
                               className="danger"
+                              disabled={deletingId === item.id}
                               onClick={() => handleDelete(item)}
                             >
-                              Delete
+                              {deletingId === item.id ? "Deleting..." : "Delete"}
                             </button>
                           </div>
                         </td>
