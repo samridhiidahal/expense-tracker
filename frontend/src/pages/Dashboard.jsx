@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { api } from "../api";
 import { useAuth } from "../AuthContext";
 import ExpenseForm from "../components/ExpenseForm";
+import SummaryPanel from "../components/SummaryPanel";
 import { formatAmount, formatDate } from "../format";
 
 export default function Dashboard() {
@@ -14,6 +15,7 @@ export default function Dashboard() {
   const [editing, setEditing] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [version, setVersion] = useState(0);
 
   const reload = useCallback(async () => {
     const params = new URLSearchParams({ limit: "500" });
@@ -49,6 +51,7 @@ export default function Dashboard() {
       await api("/expenses/", { method: "POST", json: payload });
     }
     await reload();
+    setVersion((v) => v + 1);
   }
 
   async function handleDelete(expense) {
@@ -57,6 +60,7 @@ export default function Dashboard() {
       await api(`/expenses/${expense.id}`, { method: "DELETE" });
       if (editing?.id === expense.id) setEditing(null);
       await reload();
+      setVersion((v) => v + 1);
     } catch (err) {
       setError(err.message);
     }
@@ -88,6 +92,8 @@ export default function Dashboard() {
 
       <main className="page">
         {error && <p className="error">{error}</p>}
+
+        <SummaryPanel refreshKey={version} />
 
         <ExpenseForm
           key={editing ? editing.id : "new"}

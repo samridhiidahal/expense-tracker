@@ -232,3 +232,98 @@ tr.editing {
   color: #6b7280;
   padding: 2rem 0;
 }
+.summary-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.summary-head h3 {
+  margin: 0;
+}
+
+.summary-head label {
+  margin-bottom: 0;
+  min-width: 180px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.stat {
+  background: #f9fafb;
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+}
+
+.stat .label {
+  color: #6b7280;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+.stat .value {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-top: 0.25rem;
+}
+
+.stat .sub {
+  color: #6b7280;
+  font-size: 0.85rem;
+}
+
+.charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.chart-title {
+  font-size: 0.95rem;
+  margin: 0 0 0.5rem;
+  color: #374151;
+}
+
+.chart-box {
+  height: 240px;
+  min-width: 0;
+}
+
+.legend {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 0;
+  font-size: 0.9rem;
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.2rem 0;
+}
+
+.legend .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legend .name {
+  flex: 1;
+}
+
+.legend .pct {
+  color: #6b7280;
+  width: 3rem;
+  text-align: right;
+}
